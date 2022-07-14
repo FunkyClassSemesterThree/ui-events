@@ -32,22 +32,48 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleEvents() {
+        handleSmallBtn();
+        handleLargeBtn();
+    }
+
+    private void handleSmallBtn() {
         smallBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.i("EVENT_HANDLE_TEST", ">>>>>> " + defaultTextSize);
-                defaultTextSize = ( defaultTextSize <= 10 ) ? defaultTextSize : defaultTextSize - 10;
-                theHandlerText.setTextSize(defaultTextSize);
+                handleTextChange(false, 10, 10);
             }
         });
 
+        smallBtn.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Log.i("EVENT_HANDLE_TEST_LONGER", ">>>>>> " + defaultTextSize);
+                handleTextChange(false, 2, 5);
+                return false;
+            }
+        });
+    }
+
+    private void handleLargeBtn() {
         largeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 defaultTextSize += 10;
                 theHandlerText.setTextSize(defaultTextSize);
+                handleTextChange(true, 10, 0);
             }
         });
+    }
+
+    private void handleTextChange(boolean isIncrement, int number, int testNumber) {
+        if (isIncrement) {
+            defaultTextSize += number;
+        }
+        else {
+            defaultTextSize = ( defaultTextSize <= testNumber ) ? defaultTextSize : defaultTextSize - number;
+        }
+        theHandlerText.setTextSize(defaultTextSize);
     }
 
 }
