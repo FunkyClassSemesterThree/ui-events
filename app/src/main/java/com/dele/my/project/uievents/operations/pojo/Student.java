@@ -1,16 +1,16 @@
 package com.dele.my.project.uievents.operations.pojo;
 
-public class Students {
+public class Student {
 
     private String uuid;
     private String fullName;
     private String emailAddress;
     private String studentNo;
 
-    public Students() {
+    public Student() {
     }
 
-    public Students(String uuid, String fullName, String emailAddress, String studentNo) {
+    public Student(String uuid, String fullName, String emailAddress, String studentNo) {
         this.uuid = uuid;
         this.fullName = fullName;
         this.emailAddress = emailAddress;

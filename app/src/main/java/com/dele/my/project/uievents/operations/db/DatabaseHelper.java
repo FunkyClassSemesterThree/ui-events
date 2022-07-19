@@ -1,24 +1,14 @@
 package com.dele.my.project.uievents.operations.db;
 
-import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import androidx.annotation.Nullable;
-
-import com.dele.my.project.uievents.operations.pojo.Students;
-import com.dele.my.project.uievents.operations.utils.AppConstants;
 import com.dele.my.project.uievents.operations.utils.Queries;
 
-import java.util.ArrayList;
-
-@SuppressLint("Recycle")
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "";
+    private static final String DATABASE_NAME = "AndroidLearnDb";
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -32,6 +22,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL(Queries.DROP_STUDENTS_TABLE);
+    }
+
+    protected SQLiteDatabase writer() {
+        return this.getWritableDatabase();
+    }
+
+    protected SQLiteDatabase reader() {
+        return this.getReadableDatabase();
     }
 
 }

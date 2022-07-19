@@ -3,57 +3,61 @@ package com.dele.my.project.uievents.operations.db;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
 import androidx.annotation.Nullable;
 
-import com.dele.my.project.uievents.operations.pojo.Students;
+import com.dele.my.project.uievents.operations.pojo.Student;
 import com.dele.my.project.uievents.operations.utils.AppConstants;
 import com.dele.my.project.uievents.operations.utils.Queries;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("unused")
 public class StudentsRecord extends DatabaseHelper {
 
     public StudentsRecord(@Nullable Context context) {
         super(context);
     }
 
-    public long createStudent(Students students) {
-        SQLiteDatabase sqLiteDatabase =  this.getWritableDatabase();
+    public long createStudent(Student students) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("UUID", students.getUuid());
         contentValues.put("FULL_NAME", students.getFullName());
         contentValues.put("EMAIL_ADDRESS", students.getEmailAddress());
         contentValues.put("STUDENT_NO", students.getStudentNo());
-        return sqLiteDatabase.insert(AppConstants.STUDENTS_TABLE, null, contentValues);
+        return this.writer().insert(AppConstants.STUDENTS_TABLE, null, contentValues);
     }
 
-    public Cursor getStudents(String uuid) {
-        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        return sqLiteDatabase.rawQuery(Queries.GET_STUDENTS + " WHERE uuid = ?", new String[]{
+    public Student getStudents(String uuid) {
+        Cursor response = this.reader().rawQuery(Queries.GET_STUDENTS + " WHERE uuid = ?", new String[]{
                 uuid
         });
+        response.moveToFirst();
+        Student student = null;
+        while (!response.isAfterLast()) {
+            student = new Student(response.getString(0), response.getString(1), response.getString(2), response.getString(3));
+            response.moveToNext();
+        }
+        response.close();
+        return student;
     }
 
-    public int updateStudent(String uuid, Students students) {
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+    public int updateStudent(String uuid, Student students) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("FULL_NAME", students.getFullName());
         contentValues.put("EMAIL_ADDRESS", students.getEmailAddress());
         contentValues.put("STUDENT_NO", students.getStudentNo());
-        return sqLiteDatabase.update(AppConstants.STUDENTS_TABLE, contentValues, "uuid = ?", new String[]{
+        return this.writer().update(AppConstants.STUDENTS_TABLE, contentValues, "uuid = ?", new String[]{
                 uuid
         });
     }
 
-    public ArrayList<Students> getAllStudents() {
-        ArrayList<Students> studentList = new ArrayList<>();
-        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        Cursor response = sqLiteDatabase.rawQuery(Queries.GET_STUDENTS, null);
+    public ArrayList<Student> getAllStudents() {
+        ArrayList<Student> studentList = new ArrayList<>();
+        Cursor response = this.reader().rawQuery(Queries.GET_STUDENTS, null);
         response.moveToFirst();
         while (!response.isAfterLast()) {
-            Students student = new Students();
+            Student student = new Student();
             student.setUuid(response.getString(0));
             student.setFullName(response.getString(1));
             student.setEmailAddress(response.getString(2));
@@ -61,6 +65,7 @@ public class StudentsRecord extends DatabaseHelper {
             studentList.add(student);
             response.moveToNext();
         }
+        response.close();
         return studentList;
     }
 
