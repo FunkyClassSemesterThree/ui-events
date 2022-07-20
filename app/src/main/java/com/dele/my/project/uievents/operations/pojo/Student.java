@@ -1,5 +1,7 @@
 package com.dele.my.project.uievents.operations.pojo;
 
+import androidx.annotation.NonNull;
+
 public class Student {
 
     private String uuid;
@@ -47,5 +49,16 @@ public class Student {
 
     public void setStudentNo(String studentNo) {
         this.studentNo = studentNo;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Student{" +
+                "uuid='" + uuid + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", emailAddress='" + emailAddress + '\'' +
+                ", studentNo='" + studentNo + '\'' +
+                '}';
     }
 }

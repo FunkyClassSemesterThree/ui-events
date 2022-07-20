@@ -34,9 +34,8 @@ public class StudentsRecord extends DatabaseHelper {
         });
         response.moveToFirst();
         Student student = null;
-        while (!response.isAfterLast()) {
+        if (response.isFirst())  {
             student = new Student(response.getString(0), response.getString(1), response.getString(2), response.getString(3));
-            response.moveToNext();
         }
         response.close();
         return student;
